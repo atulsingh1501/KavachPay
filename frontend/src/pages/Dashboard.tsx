@@ -327,6 +327,38 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
 
+          {/* Quick Navigation Cards */}
+          <div className="grid sm:grid-cols-2 gap-4">
+            <button
+              onClick={() => navigate('/claims')}
+              className="group bg-white rounded-3xl p-5 shadow-sm border border-slate-100 hover:shadow-md hover:border-blue-200 transition text-left cursor-pointer"
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-base font-bold text-slate-800 group-hover:text-blue-700 transition">Claim History</h3>
+                  <p className="text-xs text-slate-400 mt-1">View all claims with full signal breakdown</p>
+                </div>
+                <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center group-hover:bg-blue-100 transition">
+                  <ShieldCheck className="w-5 h-5 text-blue-500" />
+                </div>
+              </div>
+            </button>
+            <button
+              onClick={() => navigate('/payout')}
+              className="group bg-white rounded-3xl p-5 shadow-sm border border-slate-100 hover:shadow-md hover:border-emerald-200 transition text-left cursor-pointer"
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-base font-bold text-slate-800 group-hover:text-emerald-700 transition">Payout History</h3>
+                  <p className="text-xs text-slate-400 mt-1">Track your income protection payouts</p>
+                </div>
+                <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center group-hover:bg-emerald-100 transition">
+                  <TrendingUp className="w-5 h-5 text-emerald-500" />
+                </div>
+              </div>
+            </button>
+          </div>
+
           {/* AI CLAIM ADJUDICATION CARD (Step 5) */}
           {latestClaim && (
             <div className="bg-white/90 backdrop-blur-xl border-2 border-blue-500/20 shadow-2xl rounded-3xl overflow-hidden animate-in slide-in-from-bottom-5 duration-500">

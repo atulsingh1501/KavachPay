@@ -1,0 +1,17 @@
+{
+  "name": "kavachpay",
+  "version": "1.0.0",
+  "description": "> *\"Don't trust location. Trust behavior. Trust work. Trust truth.\"*",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\" \"cd ml-service && venv\\\\Scripts\\\\python.exe main.py\"",
+    "install:all": "npm install && npm install --prefix backend && npm install --prefix frontend && (cd ml-service && python -m venv venv && source venv/Scripts/activate && pip install -r requirements.txt)",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

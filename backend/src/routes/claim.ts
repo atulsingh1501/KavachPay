@@ -284,12 +284,24 @@ router.post('/simulate-disruption', authMiddleware, async (req: AuthRequest, res
         claim = await prisma.claim.update({
           where: { id: claim.id },
           data: {
-            status: 'REVIEW',
+            status: 'REVIEW' as any,
             payoutAmount: 0,
             reviewerNotes: `${claim.reviewerNotes || ''} | Payout pending manual review: ${message}`,
           },
         });
       }
+    }
+
+    // Update Trust Score after adjudication
+    const currentUser = await prisma.user.findUnique({ where: { id: userId }, select: { trustScore: true } });
+    if (currentUser) {
+      let newTrust = currentUser.trustScore;
+      if (claim.status === 'PAID' && fraudScore < 0.3) {
+        newTrust = Math.min(1.0, newTrust + 0.05); // clean PAID claim → +5%
+      } else if (fraudScore > 0.6) {
+        newTrust = Math.max(0.0, newTrust - 0.10); // suspicious activity → -10%
+      }
+      await prisma.user.update({ where: { id: userId }, data: { trustScore: parseFloat(newTrust.toFixed(4)) } });
     }
 
     res.json({
@@ -321,17 +333,60 @@ router.post('/simulate-disruption', authMiddleware, async (req: AuthRequest, res
   }
 });
 
-// Fetch Claim History for Dashboard
+// Fetch Claim History — full list for /claims page
 router.get('/history', authMiddleware, async (req: AuthRequest, res: Response) => {
   try {
+    const limit = req.query.limit ? parseInt(req.query.limit as string) : 5;
     const claims = await prisma.claim.findMany({
       where: { userId: req.user!.userId },
       orderBy: { createdAt: 'desc' },
-      take: 5
+      take: limit,
+      include: {
+        policy: { select: { planTier: true, coverageAmount: true } }
+      }
     });
     res.json(claims);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch claim history.' });
+  }
+});
+
+// Fetch all claims — no limit (for full /claims page)
+router.get('/all', authMiddleware, async (req: AuthRequest, res: Response) => {
+  try {
+    const claims = await prisma.claim.findMany({
+      where: { userId: req.user!.userId },
+      orderBy: { createdAt: 'desc' },
+      include: {
+        policy: { select: { planTier: true, coverageAmount: true } }
+      }
+    });
+    res.json(claims);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch all claims.' });
+  }
+});
+
+// Fetch Payout History — only PAID claims with amounts > 0
+router.get('/payouts', authMiddleware, async (req: AuthRequest, res: Response) => {
+  try {
+    const payouts = await prisma.claim.findMany({
+      where: {
+        userId: req.user!.userId,
+        status: 'PAID',
+        payoutAmount: { gt: 0 }
+      },
+      orderBy: { createdAt: 'desc' },
+      include: {
+        policy: { select: { planTier: true } }
+      }
+    });
+
+    const totalPaid = payouts.reduce((sum, p) => sum + (p.payoutAmount || 0), 0);
+
+    res.json({ payouts, totalPaid, count: payouts.length });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch payout history.' });
   }
 });
 

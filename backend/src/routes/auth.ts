@@ -273,7 +273,17 @@ router.post('/register', async (req: Request, res: Response) => {
        return;
     }
 
-    console.log('Registration Request Body:', req.body);
+    // Check if this email is already registered
+    const existingUser = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (existingUser) {
+      res.status(409).json({
+        error: 'This email is already registered. Please sign in instead.',
+      });
+      return;
+    }
 
     const newUser = await prisma.user.create({
       data: {
@@ -308,6 +318,11 @@ router.post('/register', async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     console.error('Registration error detailed:', error);
+    // Catch any remaining unique constraint errors as a safety net
+    if (error?.code === 'P2002') {
+      res.status(409).json({ error: 'This email is already registered. Please sign in instead.' });
+      return;
+    }
     res.status(500).json({ error: `Server error during registration: ${error.message || 'Unknown error'}` });
   }
 });

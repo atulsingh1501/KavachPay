@@ -79,7 +79,7 @@ router.post('/order', authMiddleware, async (req: AuthRequest, res: Response) =>
     if (amountInPaise === 0) {
       const coverageAmount = PLAN_COVERAGES[planTier];
       const endDate = new Date();
-      endDate.setDate(endDate.getDate() + 7); // 7-day coverage
+      endDate.setDate(endDate.getDate() + 31); // 31-day coverage
 
       const newPolicy = await prisma.policy.create({
         data: {
@@ -102,7 +102,7 @@ router.post('/order', authMiddleware, async (req: AuthRequest, res: Response) =>
       const coverageAmount = PLAN_COVERAGES[planTier];
       const amountInRupees = amountInPaise / 100;
       const endDate = new Date();
-      endDate.setDate(endDate.getDate() + 7);
+      endDate.setDate(endDate.getDate() + 31); // 31-day coverage
 
       const newPolicy = await prisma.policy.create({
         data: {
@@ -172,7 +172,7 @@ router.post('/activate-free', authMiddleware, async (req: AuthRequest, res: Resp
     }
 
     const endDate = new Date();
-    endDate.setDate(endDate.getDate() + 7);
+    endDate.setDate(endDate.getDate() + 31); // 31-day coverage
 
     const newPolicy = await prisma.policy.create({
       data: {
@@ -233,7 +233,7 @@ router.post('/verify', authMiddleware, async (req: AuthRequest, res: Response) =
     const coverageAmount = PLAN_COVERAGES[planTier];
 
     const endDate = new Date();
-    endDate.setDate(endDate.getDate() + 7); // 7-day coverage
+    endDate.setDate(endDate.getDate() + 31); // 31-day coverage
 
     const newPolicy = await prisma.policy.create({
       data: {

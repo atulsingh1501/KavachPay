@@ -7,6 +7,8 @@ import Signin from './pages/Signin';
 import Dashboard from './pages/Dashboard';
 import Policy from './pages/Policy';
 import Admin from './pages/Admin';
+import Claims from './pages/Claims';
+import Payout from './pages/Payout';
 
 const queryClient = new QueryClient();
 
@@ -21,6 +23,8 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/policy" element={<Policy />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/claims" element={<Claims />} />
+          <Route path="/payout" element={<Payout />} />
         </Routes>
       </Router>
     </QueryClientProvider>
