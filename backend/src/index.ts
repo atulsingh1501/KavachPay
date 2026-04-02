@@ -14,13 +14,34 @@ import adminRoutes from './routes/admin.js';
 
 dotenv.config();
 
+import helmet from 'helmet';
+import { rateLimit } from 'express-rate-limit';
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Needed for accurate req.ip when deployed behind reverse proxies.
-app.set('trust proxy', true);
+// 🛡️ Security Middleware
+app.use(helmet()); // Sets various HTTP headers for security (XSS, Clickjacking, etc.)
 
-app.use(cors());
+// ⚡ Rate Limiting: Prevent brute-force and spam (100 requests per 15 minutes)
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, 
+  limit: 100,
+  standardHeaders: 'draft-7',
+  legacyHeaders: false,
+  message: { error: 'Too many requests from this IP, please try again after 15 minutes.' }
+});
+app.use('/api/', limiter);
+
+// Needed for accurate req.ip when deployed behind reverse proxies.
+app.set('trust proxy', 1);
+
+const corsOptions = {
+  origin: process.env.FRONTEND_URL || '*', // Restrict to your frontend in production
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);

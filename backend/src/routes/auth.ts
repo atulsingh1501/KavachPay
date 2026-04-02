@@ -263,6 +263,10 @@ router.post('/register', async (req: Request, res: Response) => {
        return;
     }
 
+    // 🧹 Basic Input Sanitization (XSS Prevention)
+    const cleanFullName = fullName.replace(/<[^>]*>?/gm, '').trim();
+    const cleanUpiId = (upiId || '').replace(/<[^>]*>?/gm, '').trim();
+
     // Check verification
     const verification = await prisma.otpVerification.findFirst({
       where: { email, verified: true },
@@ -287,14 +291,14 @@ router.post('/register', async (req: Request, res: Response) => {
 
     const newUser = await prisma.user.create({
       data: {
-        fullName,
+        fullName: cleanFullName,
         email,
         phoneNumber,
         city,
         deliveryPlatform,
         vehicleType,
         weeklyEarnings: Number(weeklyEarnings),
-        upiId,
+        upiId: cleanUpiId,
         isVerified: true,
       },
     });
