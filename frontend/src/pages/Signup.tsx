@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ShieldCheck, ArrowRight, Loader2, Send } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import OtpAnimationOverlay from '../components/OtpAnimationOverlay';
 
 const Signup: React.FC = () => {
   const navigate = useNavigate();
@@ -10,6 +11,7 @@ const Signup: React.FC = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [otpSent, setOtpSent] = useState(false);
+  const [isVerifyingAnimating, setIsVerifyingAnimating] = useState(false);
 
   // OTP Countdown logic
   const [countdown, setCountdown] = useState(0);
@@ -111,7 +113,12 @@ const Signup: React.FC = () => {
           email: formData.email,
           otp: enteredOtp
         });
-        setStep(2);
+        
+        setIsVerifyingAnimating(true);
+        setTimeout(() => {
+          setIsVerifyingAnimating(false);
+          setStep(2);
+        }, 3000);
       } catch (err: any) {
         setError(err.response?.data?.error || 'Invalid or expired code.');
       } finally {
@@ -403,6 +410,7 @@ const Signup: React.FC = () => {
           Powered by KavachPay Autonomous Data Protection
         </p>
       </div>
+      <OtpAnimationOverlay isVisible={isVerifyingAnimating} />
     </main>
   );
 };

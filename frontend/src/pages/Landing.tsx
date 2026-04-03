@@ -17,12 +17,6 @@ import {
   Zap,
 } from 'lucide-react';
 
-const stats = [
-  { value: '15K+', label: 'Workers protected', description: 'across India' },
-  { value: '<20s', label: 'Average payout time', description: 'via UPI' },
-  { value: '5', label: 'Cities covered', description: 'and growing' },
-];
-
 const features = [
   {
     icon: CloudRain,
@@ -315,14 +309,6 @@ const Landing: React.FC = () => {
                   </div>
                 </div>
               </div>
-
-              {/* Floating Badge - Top Right */}
-              <div className="absolute -top-4 -right-4 bg-stone-900 text-white rounded-2xl px-5 py-3 shadow-xl">
-                <div className="flex items-center gap-2">
-                  <Globe className="w-5 h-5 text-emerald-400" />
-                  <span className="text-sm font-semibold">5 Cities Live</span>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -342,21 +328,6 @@ const Landing: React.FC = () => {
                 <span className={`text-sm font-medium ${idx % disruptionFeed.length === 0 ? 'text-emerald-400' : 'text-white'}`}>
                   {item}
                 </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="py-16 lg:py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
-            {stats.map((stat, idx) => (
-              <div key={idx} className="text-center lg:text-left">
-                <p className="text-3xl sm:text-4xl lg:text-5xl font-bold text-stone-900">{stat.value}</p>
-                <p className="mt-2 text-sm sm:text-base font-semibold text-stone-700">{stat.label}</p>
-                <p className="text-sm text-stone-500">{stat.description}</p>
               </div>
             ))}
           </div>

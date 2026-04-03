@@ -1,1 +1,28 @@
 @import "tailwindcss";
+
+@keyframes razorpay-jiggle {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  10% { transform: translate(-2px, -1px) scale(1.02); }
+  20% { transform: translate(2px, 1px) scale(1); }
+  30% { transform: translate(-2px, 2px) scale(0.98); }
+  40% { transform: translate(2px, -2px) scale(1.02); }
+  50% { transform: translate(-1px, 1px) scale(1); }
+  60% { transform: translate(1px, -2px) scale(1.05); }
+  70% { transform: translate(-2px, 1px) scale(1); }
+  80% { transform: translate(2px, 2px) scale(0.98); }
+  90% { transform: translate(-1px, -1px) scale(1.02); }
+}
+
+.animate-razorpay-jiggle {
+  animation: razorpay-jiggle 0.15s infinite;
+}
+
+@keyframes particle-float {
+  0% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translate(var(--tw-translate-x), var(--tw-translate-y)) scale(0) rotate(360deg); opacity: 0; }
+}
+
+.animate-particle {
+  animation: particle-float 2s infinite ease-out;
+}

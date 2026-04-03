@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ShieldCheck, ArrowRight, Loader2, Key } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import OtpAnimationOverlay from '../components/OtpAnimationOverlay';
 
 const Signin: React.FC = () => {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ const Signin: React.FC = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [countdown, setCountdown] = useState(0);
+  const [isVerifyingAnimating, setIsVerifyingAnimating] = useState(false);
 
   useEffect(() => {
     let timer: any;
@@ -77,7 +79,12 @@ const Signin: React.FC = () => {
       });
       localStorage.setItem('kavachpay_token', response.data.token);
       localStorage.setItem('kavachpay_user', JSON.stringify(response.data.user));
-      navigate('/dashboard');
+      
+      setIsVerifyingAnimating(true);
+      setTimeout(() => {
+        setIsVerifyingAnimating(false);
+        navigate('/dashboard');
+      }, 3000);
     } catch (err: any) {
       setError(err.response?.data?.error || 'Invalid or expired code.');
     } finally {
@@ -190,6 +197,7 @@ const Signin: React.FC = () => {
           Don't have an account? <Link to="/signup" className="text-blue-600 font-bold hover:underline">Create one for free</Link>
         </p>
       </div>
+      <OtpAnimationOverlay isVisible={isVerifyingAnimating} />
     </main>
   );
 };
