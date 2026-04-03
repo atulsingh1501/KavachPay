@@ -45,9 +45,9 @@ router.post('/send-otp', async (req: Request, res: Response) => {
       }
     });
 
-    // Send via Brevo SMTP
+    // Send via Brevo SMTP (Background task for speed)
     if (BREVO_API_KEY) {
-      await fetch('https://api.brevo.com/v3/smtp/email', {
+      fetch('https://api.brevo.com/v3/smtp/email', {
         method: 'POST',
         headers: {
           'api-key': BREVO_API_KEY,
@@ -59,7 +59,7 @@ router.post('/send-otp', async (req: Request, res: Response) => {
           to: [{ email: email }],
           subject: `${otp} is your KavachPay verification code`,
           htmlContent: `
-            <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; rounded: 12px;">
+            <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px;">
               <h2 style="color: #1e3a8a; text-align: center;">KavachPay Verification</h2>
               <p style="color: #475569; font-size: 16px; line-height: 1.5;">Hello,</p>
               <p style="color: #475569; font-size: 16px; line-height: 1.5;">To complete your registration, please use the following unique verification code:</p>
@@ -72,7 +72,7 @@ router.post('/send-otp', async (req: Request, res: Response) => {
             </div>
           `
         })
-      });
+      }).catch(err => console.error('Background Email Error (Registration):', err));
     }
 
     res.json({ message: 'OTP sent successfully' });
@@ -160,7 +160,7 @@ router.post('/login-send-otp', async (req: Request, res: Response) => {
     });
 
     if (BREVO_API_KEY) {
-      await fetch('https://api.brevo.com/v3/smtp/email', {
+      fetch('https://api.brevo.com/v3/smtp/email', {
         method: 'POST',
         headers: {
           'api-key': BREVO_API_KEY,
@@ -182,7 +182,7 @@ router.post('/login-send-otp', async (req: Request, res: Response) => {
             </div>
           `
         })
-      });
+      }).catch(err => console.error('Background Email Error (Login):', err));
     }
 
     res.json({ message: 'Login OTP sent!' });
