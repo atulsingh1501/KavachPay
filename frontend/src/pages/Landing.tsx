@@ -315,17 +315,17 @@ const Landing: React.FC = () => {
       </section>
 
       {/* Live Disruption Ticker */}
-      <section className="bg-stone-900 py-4 overflow-hidden">
+      <section className="bg-stone-900 py-4 overflow-hidden border-y border-white/5">
         <div className="relative">
-          <div className="flex animate-marquee whitespace-nowrap">
+          <div className="flex animate-marquee whitespace-nowrap w-max">
             {[...disruptionFeed, ...disruptionFeed].map((item, idx) => (
-              <div key={idx} className="flex items-center gap-3 mx-8">
+              <div key={idx} className="flex items-center gap-4 mx-12 flex-shrink-0">
                 {idx % disruptionFeed.length === 0 ? (
                   <Activity className="w-4 h-4 text-emerald-400" />
                 ) : (
-                  <span className="w-1.5 h-1.5 rounded-full bg-stone-600" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500/50" />
                 )}
-                <span className={`text-sm font-medium ${idx % disruptionFeed.length === 0 ? 'text-emerald-400' : 'text-white'}`}>
+                <span className={`text-sm font-bold tracking-wide ${idx % disruptionFeed.length === 0 ? 'text-emerald-400' : 'text-white'}`}>
                   {item}
                 </span>
               </div>
