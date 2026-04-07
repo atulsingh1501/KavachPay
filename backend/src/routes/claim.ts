@@ -220,16 +220,39 @@ router.post('/simulate-disruption', authMiddleware, async (req: AuthRequest, res
     const aqiValue = (consensus?.raw as any)?.aqi?.aqi || 0;
     const isRealDisruption = envDisruptionScore > 0.3;
     const isAQIHazard = aqiValue > 200;
+    const triggerEventStr = isAQIHazard ? `AQI_HAZARD_DETECTION_${userCity.toUpperCase()}` : `STORM_CONSENSUS_DETECTION_${userCity.toUpperCase()}`;
+
     // Note: fraudScore < 0.45 is redundant — if trust >= 0.65 then fraud = 1 - trust <= 0.35.
     // The aggregate decision already encodes the threshold logic.
     const shouldAutoPay = isRealDisruption && aggregateDecision === 'PAID';
     const claimStatus = shouldAutoPay ? 'PAID' : 'REVIEW';
+
+    // 🔒 Payout Idempotency Check
+    // Prevent duplicate payouts for the same environmental event type within 24 hours.
+    if (shouldAutoPay) {
+      const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+      const duplicatePaidClaim = await prisma.claim.findFirst({
+        where: {
+          policyId: policy.id,
+          triggerEvent: triggerEventStr,
+          status: 'PAID',
+          createdAt: { gte: twentyFourHoursAgo }
+        }
+      });
+
+      if (duplicatePaidClaim) {
+        res.status(429).json({ 
+          error: 'Idempotency Triggered: A payout for this specific environmental event has already been processed today.' 
+        });
+        return;
+      }
+    }
     
     let claim = await prisma.claim.create({
       data: {
         userId,
         policyId: policy.id,
-        triggerEvent: isAQIHazard ? `AQI_HAZARD_DETECTION_${userCity.toUpperCase()}` : `STORM_CONSENSUS_DETECTION_${userCity.toUpperCase()}`,
+        triggerEvent: triggerEventStr,
         status: claimStatus as any,
         fraudScore,
         workProofScore: pillar3Score,
