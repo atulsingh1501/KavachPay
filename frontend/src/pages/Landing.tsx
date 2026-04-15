@@ -219,7 +219,7 @@ const Landing: React.FC = () => {
               </button>
               <button
                 onClick={() => navigate('/signup')}
-                className="bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 text-sm font-semibold px-4 sm:px-5 py-2.5 rounded-full hover:bg-stone-800 dark:hover:bg-white transition-all hover:shadow-lg active:scale-[0.98] cursor-pointer"
+                className="bg-stone-900 dark:bg-[#ffffff] text-white dark:text-[#000000] text-sm font-semibold px-4 sm:px-5 py-2.5 rounded-full hover:bg-stone-800 dark:hover:bg-[#f0f0f0] transition-all hover:shadow-lg active:scale-[0.98] cursor-pointer"
               >
                 Get Started
               </button>
@@ -262,7 +262,7 @@ const Landing: React.FC = () => {
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
                 <button
                   onClick={() => navigate('/signup')}
-                  className="group inline-flex items-center justify-center gap-2 bg-stone-900 text-white text-base font-semibold px-8 py-4 rounded-full hover:bg-stone-800 transition-all hover:shadow-xl active:scale-[0.98] cursor-pointer"
+                  className="group inline-flex items-center justify-center gap-2 bg-stone-900 dark:bg-[#ffffff] text-white dark:text-[#000000] text-base font-semibold px-8 py-4 rounded-full hover:bg-stone-800 dark:hover:bg-[#f0f0f0] transition-all hover:shadow-xl active:scale-[0.98] cursor-pointer"
                 >
                   Get Protected Now
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -336,7 +336,7 @@ const Landing: React.FC = () => {
                 ) : (
                   <span className="w-1.5 h-1.5 rounded-full bg-stone-600" />
                 )}
-                <span className={`text-sm font-medium leading-none ${idx % disruptionFeed.length === 0 ? 'text-emerald-400' : 'text-white'}`}>
+                <span className={`text-sm font-medium leading-none ${idx % disruptionFeed.length === 0 ? 'text-emerald-400' : 'text-white dark:text-[#ffffff]'}`}>
                   {item}
                 </span>
               </div>
@@ -399,11 +399,11 @@ const Landing: React.FC = () => {
                 <p className="text-xs font-semibold uppercase tracking-wide text-stone-400">Verification Module</p>
               </div>
               
-              <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mb-6">
+              <div className="w-14 h-14 bg-white/10 dark:bg-[#ffffff15] rounded-2xl flex items-center justify-center mb-6">
                 {React.createElement(features[activeFeature].icon, { className: 'w-7 h-7 text-emerald-400' })}
               </div>
 
-              <h3 className="text-2xl lg:text-3xl font-bold mb-3">{features[activeFeature].title}</h3>
+              <h3 className="text-2xl lg:text-3xl font-bold mb-3 dark:text-[#ffffff]">{features[activeFeature].title}</h3>
               <p className="text-stone-300 text-lg leading-relaxed mb-8">{features[activeFeature].description}</p>
 
               <div className="pt-6 border-t border-white/20">
@@ -487,10 +487,10 @@ const Landing: React.FC = () => {
               <div className="max-w-xl">
                 <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-6">
                   <Shield className="w-4 h-4 text-emerald-400" />
-                  <span className="text-sm font-medium text-white">KavachPay Protection</span>
+                  <span className="text-sm font-medium text-white dark:text-[#ffffff]">KavachPay Protection</span>
                 </div>
                 
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6">
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white dark:text-[#ffffff] leading-tight mb-6">
                   Storm outside.<br />
                   <span className="text-emerald-400">Stable income inside.</span>
                 </h2>
@@ -503,7 +503,7 @@ const Landing: React.FC = () => {
                   ].map((item, idx) => (
                     <li key={idx} className="flex items-start gap-3">
                       <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                      <span className="text-white/90 text-lg">{item}</span>
+                      <span className="text-white/90 dark:text-[#ffffff] text-lg">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -688,7 +688,7 @@ const Landing: React.FC = () => {
             <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-stone-500/10 rounded-full blur-3xl" />
             
             <div className="relative z-10">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight max-w-3xl mx-auto text-balance">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white dark:text-[#ffffff] leading-tight max-w-3xl mx-auto text-balance">
                 Don&apos;t let weather decide your{' '}
                 <span className="text-emerald-400">payout.</span>
               </h2>
