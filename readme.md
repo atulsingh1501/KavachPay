@@ -1,6 +1,6 @@
 # 🔐 KavachPay — Work-Proof Parametric Insurance for India's Gig Economy
 
-**[Live Demo](https://kavachpay-seven.vercel.app/)**
+## 🚀 [**🔴 PLAY LIVE DEMO NOW**](https://kavachpay-seven.vercel.app/)
 
 > *"Don't trust location. Trust behavior. Trust work. Trust truth."*
 
