@@ -1,5 +1,7 @@
 # 🔐 KavachPay — Work-Proof Parametric Insurance for India's Gig Economy
 
+**[Live Demo](https://kavachpay-seven.vercel.app/)**
+
 > *"Don't trust location. Trust behavior. Trust work. Trust truth."*
 
 
@@ -22,7 +24,7 @@
 13. [System Architecture](#architecture)
 14. [Folder Structure](#folder-structure)
 15. [Business Model](#business-model)
-
+16. [How to Run Locally](#how-to-run-locally)
 ---
 
 ## ⚡ The Core Innovation — Work-Proof Protocol <a name="core-innovation"></a>
@@ -888,74 +890,117 @@ flowchart LR
 
 ## 📁 Folder Structure <a name="folder-structure"></a>
 
-```
+```text
 kavachpay/
-├── frontend/                          # React + Vite app
+├── frontend/                          # React + Vite + TypeScript app
 │   ├── public/
 │   ├── src/
-│   │   ├── pages/
-│   │   │   ├── Landing.jsx
-│   │   │   ├── Register.jsx
-│   │   │   ├── Login.jsx
-│   │   │   ├── Dashboard.jsx
-│   │   │   ├── Policy.jsx
-│   │   │   ├── Claims.jsx
-│   │   │   ├── Payout.jsx
-│   │   │   └── Admin.jsx
+│   │   ├── pages/                   
+│   │   │   ├── Landing.tsx
+│   │   │   ├── Signup.tsx
+│   │   │   ├── Signin.tsx
+│   │   │   ├── Dashboard.tsx
+│   │   │   ├── Policy.tsx
+│   │   │   ├── Claims.tsx
+│   │   │   ├── Payout.tsx
+│   │   │   ├── Admin.tsx
+│   │   │   └── HowItWorks.tsx
 │   │   ├── components/
-│   │   │   ├── LiveWeatherCard.jsx
-│   │   │   ├── WorkProofStatus.jsx
-│   │   │   ├── ClaimFeed.jsx
-│   │   │   ├── ZoneRiskMap.jsx
-│   │   │   ├── PolicyBadge.jsx
-│   │   │   ├── PlanSelector.jsx
-│   │   │   ├── ClaimTimeline.jsx
-│   │   │   ├── SignalBreakdown.jsx
-│   │   │   ├── FraudRingAlerts.jsx
-│   │   │   └── Analytics.jsx
-│   │   ├── hooks/
-│   │   │   ├── useWeather.js
-│   │   │   ├── useWorkProof.js
-│   │   │   └── useClaims.js
-│   │   ├── api/
-│   │   │   └── client.js              # Axios instance
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   ├── tailwind.config.js
-│   └── vite.config.js
+│   │   ├── lib/
+│   │   │   └── api.ts                 # Axios instance
+│   │   ├── App.tsx
+│   │   └── main.tsx
+│   ├── tailwind.config.ts
+│   └── vite.config.ts
 │
-├── backend/                           # Node.js + Express
+├── backend/                           # Node.js + Express + TypeScript
 │   ├── src/
-│   │   ├── routes/
+│   │   ├── routes/                    
 │   │   │   ├── auth.ts
-│   │   │   ├── claims.ts
+│   │   │   ├── claim.ts
 │   │   │   ├── policy.ts
-│   │   │   ├── payout.ts
+│   │   │   ├── session.ts
+│   │   │   ├── user.ts
 │   │   │   └── admin.ts
 │   │   ├── services/
-│   │   │   ├── monitoringEngine.ts
-│   │   │   ├── claimPipeline.ts
-│   │   │   ├── workProofTracker.ts
-│   │   │   ├── fraudDetection.ts
-│   │   │   └── payoutService.ts
-│   │   ├── prisma/
-│   │   │   └── schema.prisma
+│   │   ├── middleware/
 │   │   └── index.ts
+│   ├── prisma/
+│   │   └── schema.prisma
 │   └── package.json
 │
-└── ml-service/                        # Python + FastAPI
-    ├── models/
-    │   ├── risk_model.pkl
-    │   ├── work_proof_model.pkl
-    │   ├── fraud_model.pkl
-    │   └── ring_detector.pt
-    ├── routes/
-    │   ├── risk_score.py
-    │   ├── work_proof.py
-    │   ├── fraud_score.py
-    │   └── ring_detect.py
-    ├── main.py
-    └── requirements.txt
+├── ml-service/                        # Python + FastAPI
+│   ├── models/
+│   │   ├── risk_model.pkl
+│   │   ├── work_proof_model.pkl
+│   │   ├── fraud_model.pkl
+│   │   └── ring_gnn_meta.pkl
+│   ├── routes/
+│   ├── main.py
+│   ├── model_hub.py
+│   ├── scoring.py
+│   └── requirements.txt
+│
+└── package.json                       # Root (Concurrent startup scripts)
+```
+
+---
+
+## 🚀 How to Run Locally <a name="how-to-run-locally"></a>
+
+You can launch the entire KavachPay suite (Frontend, Backend, and ML-Service) simultaneously with a single script.
+
+### Prerequisites
+- [Node.js](https://nodejs.org/en/) (v18+)
+- [Python 3.9+](https://www.python.org/)
+- [PostgreSQL](https://www.postgresql.org/) (or an active NeonDB connection)
+
+### 1. Configure Environment Variables
+You need to create `.env` files for both the backend and frontend. Here is a baseline configuration:
+
+**`backend/.env`**:
+```env
+PORT=5000
+DATABASE_URL="your_postgres_database_url_here"
+JWT_SECRET="your_jwt_secret_here"
+FRONTEND_URL="http://localhost:5173"
+BREVO_API_KEY="your_brevo_api_key_here"
+BREVO_SENDER_EMAIL="your_brevo_sender_email_here"
+RAZORPAY_KEY_ID="your_razorpay_key_id_here"
+RAZORPAY_KEY_SECRET="your_razorpay_key_secret_here"
+NEWS_API_KEY="your_news_api_key_here"
+AQI_API_KEY="your_aqi_api_key_here"
+ML_SERVICE_URL="http://127.0.0.1:8000"
+```
+
+**`frontend/.env`**:
+```env
+VITE_API_URL="http://localhost:5000/api"
+```
+
+### 2. Install Dependencies & Setup
+Run the unified setup script from the root directory. This will install all Node packages and create the Python virtual environment for the ML service.
+```bash
+npm run install:all
+```
+
+Then, generate and push the Prisma Client for your database:
+```bash
+cd backend
+npx prisma db push
+npx prisma generate
+cd ..
+```
+
+### 3. Start the Application
+Boot the Frontend, Backend, and ML-Service concurrently:
+```bash
+npm run dev
+```
+
+- **Frontend:** http://localhost:5173
+- **Backend API:** http://localhost:5000
+- **ML-Service:** http://127.0.0.1:8000
 ```
 
 ---
@@ -997,13 +1042,7 @@ Net margin:          30%
 | 4 | 24 months | B2B — white-label Work-Proof Protocol to other insurtechs |
 | 5 | 36 months | International — Southeast Asia gig markets |
 
-### Regulatory Strategy
 
-- Partner with IRDAI-licensed insurer as risk carrier (e.g., Digit Insurance, TATA AIG)
-- KavachPay operates as licensed insurance intermediary and technology provider
-- All behavioral data is PDPB-compliant — stored as mathematical feature vectors, not raw data
-
----
 
 ## 🏆 Why KavachPay Wins DEVTrails 2026
 
