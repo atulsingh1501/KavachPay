@@ -380,54 +380,52 @@ class ModelHub:
 
     def _train_fraud_model(self) -> None:
         from sklearn.ensemble import IsolationForest
+        from sklearn.pipeline import Pipeline
+        from sklearn.preprocessing import StandardScaler
+        import numpy as np
 
         rng = np.random.default_rng(11)
 
         # ── Genuine human sessions ──────────────────────────────────────────
-        n_human = 5000    # increased: more human variety → better anomaly boundary
-        # avg gap ~50-70s with natural variance, realistic jitter distribution
+        n_human = 5000
         avg_gap_human    = rng.normal(60_000, 8_000, n_human)
-        jitter_human     = np.abs(rng.normal(1_200, 500, n_human)) + 300  # higher realistic jitter
-        hb_count_human   = rng.integers(3, 80, n_human)   # low count is OK (short sessions)
-        # Peak hour bias for real workers (login during delivery windows)
+        jitter_human     = np.abs(rng.normal(1_200, 500, n_human)) + 300
+        hb_count_human   = rng.integers(3, 80, n_human)
         login_hour_human = np.concatenate([
-            rng.integers(11, 15, n_human // 3),                        # lunch window
-            rng.integers(18, 23, n_human // 3),                        # dinner window
-            rng.integers(8, 11, n_human - 2 * (n_human // 3)),         # morning deliveries
+            rng.integers(11, 15, n_human // 3),
+            rng.integers(18, 23, n_human // 3),
+            rng.integers(8, 11, n_human - 2 * (n_human // 3)),
         ])
         X_human = np.column_stack([avg_gap_human, jitter_human, hb_count_human, login_hour_human])
 
-        # ── Bot / scripted sessions ─────────────────────────────────────────
-        n_bot = 800       # increased: more bot variety → harder to game
-        # Bots: extremely precise (<60ms jitter), often off-hours, fixed patterns
-        avg_gap_bot  = rng.normal(60_000, 150, n_bot)     # robot-precise (tighter variance)
-        jitter_bot   = np.abs(rng.normal(20, 15, n_bot))  # near-zero jitter
-        hb_count_bot = rng.integers(50, 250, n_bot)        # very high — automated
+        # ── Bot / scripted sessions ──────────────────────────────────────────
+        n_bot = 800
+        avg_gap_bot  = rng.normal(60_000, 150, n_bot)
+        jitter_bot   = np.abs(rng.normal(20, 15, n_bot))
+        hb_count_bot = rng.integers(50, 250, n_bot)
         login_hour_bot = np.concatenate([
-            rng.integers(0, 6, n_bot // 2),                # dead-of-night
-            rng.integers(1, 5, n_bot - n_bot // 2),        # 1-5 AM burst
+            rng.integers(0, 5, n_bot // 2),
+            rng.integers(15, 17, n_bot - (n_bot // 2)),
         ])
         X_bot = np.column_stack([avg_gap_bot, jitter_bot, hb_count_bot, login_hour_bot])
 
         X = np.vstack([X_human, X_bot])
-        # contamination = fraction of bots in training set
-        contamination = n_bot / (n_human + n_bot)
 
-        model = IsolationForest(
-            contamination=round(contamination, 3),
-            random_state=11,
-            n_estimators=200,          # more trees → more robust anomaly boundary
-            max_samples='auto',
-            max_features=0.8,          # feature subsampling for diversity
-        )
-        model.fit(X)
-        joblib.dump(model, FRAUD_MODEL_PATH)
-        logger.info(
-            "Pillar 1 IsolationForest trained on %d human + %d bot sessions (contamination=%.2f).",
-            n_human, n_bot, contamination,
-        )
+        contamination = len(X_bot) / len(X)
+        pipeline = Pipeline([
+            ('scaler', StandardScaler()),
+            ('iso', IsolationForest(
+                n_estimators=150,
+                contamination=contamination,
+                random_state=42,
+                n_jobs=-1
+            ))
+        ])
 
-    # ── Pillar 3 — GBC with login_hour + chain_valid ───────────────────────
+        pipeline.fit(X)
+
+        joblib.dump(pipeline, FRAUD_MODEL_PATH)
+        self.fraud_model = pipeline
 
     def _train_work_proof_model(self) -> None:
         from sklearn.ensemble import GradientBoostingClassifier
