@@ -194,13 +194,16 @@ const Landing: React.FC = () => {
               <button onClick={() => navigate('/howitworks')} className="text-sm font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors cursor-pointer">
                 How it Works
               </button>
-              <a href="#features" className="text-sm font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors">
+              <button onClick={() => navigate('/about')} className="text-sm font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors cursor-pointer">
+                About Us
+              </button>
+              <a href="/#features" className="text-sm font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors">
                 Features
               </a>
-              <a href="#pricing" className="text-sm font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors">
+              <a href="/#pricing" className="text-sm font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors">
                 Pricing
               </a>
-              <a href="#faq" className="text-sm font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors">
+              <a href="/#faq" className="text-sm font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors">
                 FAQ
               </a>
             </div>
@@ -243,13 +246,16 @@ const Landing: React.FC = () => {
               <button onClick={() => { setIsMobileMenuOpen(false); navigate('/howitworks'); }} className="text-left text-base font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 px-2 py-1">
                 How it Works
               </button>
-              <a href="#features" onClick={() => setIsMobileMenuOpen(false)} className="text-base font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 px-2 py-1">
+              <button onClick={() => { setIsMobileMenuOpen(false); navigate('/about'); }} className="text-left text-base font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 px-2 py-1">
+                About Us
+              </button>
+              <a href="/#features" onClick={() => setIsMobileMenuOpen(false)} className="text-base font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 px-2 py-1">
                 Features
               </a>
-              <a href="#pricing" onClick={() => setIsMobileMenuOpen(false)} className="text-base font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 px-2 py-1">
+              <a href="/#pricing" onClick={() => setIsMobileMenuOpen(false)} className="text-base font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 px-2 py-1">
                 Pricing
               </a>
-              <a href="#faq" onClick={() => setIsMobileMenuOpen(false)} className="text-base font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 px-2 py-1">
+              <a href="/#faq" onClick={() => setIsMobileMenuOpen(false)} className="text-base font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 px-2 py-1">
                 FAQ
               </a>
               <div className="flex flex-col gap-3 pt-4 mt-2 border-t border-stone-200 dark:border-stone-800">

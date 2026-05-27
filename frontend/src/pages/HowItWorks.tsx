@@ -17,12 +17,19 @@ import {
   DollarSign,
   ChevronDown,
   Shield,
+  Sun,
+  Moon,
+  Menu,
+  X
 } from 'lucide-react';
+import { useTheme } from '../lib/ThemeContext';
 
 export default function HowItWorks() {
   const navigate = useNavigate();
+  const { isDark, toggle } = useTheme();
   const [activeStep, setActiveStep] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const mainProcess = [
     {
@@ -153,38 +160,115 @@ export default function HowItWorks() {
   ];
 
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-900 font-sans relative overflow-hidden">
+    <div className="min-h-screen bg-stone-50 dark:bg-stone-950 text-stone-900 dark:text-stone-100 font-sans relative overflow-hidden">
       {/* Background Logo Watermark - Adjusted for visibility */}
-      <div className="fixed inset-0 pointer-events-none hidden sm:flex items-center justify-center opacity-[0.06] -z-10">
+      <div className="fixed inset-0 pointer-events-none hidden sm:flex items-center justify-center opacity-[0.06] dark:opacity-[0.03] -z-10">
         <img
           src="/KavachPay_logo.png"
           alt=""
           className="w-[420px] h-[420px] lg:w-[800px] lg:h-[800px] object-contain select-none scale-125"
         />
       </div>
-      {/* Navigation */}
-      <header className="sticky top-0 z-50 bg-stone-50/95 backdrop-blur-md border-b border-stone-200">
+
+      {/* Navigation (Exactly matching Landing/AboutUs) */}
+      <header className="sticky top-0 z-50 bg-stone-50/95 dark:bg-stone-950/95 backdrop-blur-md border-b border-stone-200 dark:border-stone-800">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex h-16 items-center justify-between">
             {/* Logo */}
-            <button onClick={() => navigate('/')} className="flex items-center gap-3 cursor-pointer">
+            <div className="flex items-center gap-2 sm:gap-3 cursor-pointer" onClick={() => navigate('/')}>
               <img
-                src="/KavachPay_logo.png  "
+                src="/KavachPay_logo.png"
                 alt="KavachPay"
                 className="h-9 w-9 object-contain"
               />
-              <span className="text-xl font-bold tracking-tight text-stone-900">KavachPay</span>
-            </button>
+              <span className="text-xl font-bold tracking-tight text-stone-900 dark:text-stone-100">KavachPay</span>
+            </div>
 
-            {/* Back Button */}
-            <button
-              onClick={() => navigate(-1)}
-              className="inline-flex items-center gap-2 text-sm font-medium text-stone-600 hover:text-stone-900 transition-colors cursor-pointer"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Back
-            </button>
+            {/* Nav Links - Desktop */}
+            <div className="hidden md:flex items-center gap-8">
+              <button onClick={() => navigate('/howitworks')} className="text-sm font-medium text-stone-900 dark:text-stone-100 transition-colors cursor-pointer">
+                How it Works
+              </button>
+              <button onClick={() => navigate('/about')} className="text-sm font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors cursor-pointer">
+                About Us
+              </button>
+              <a href="/#features" className="text-sm font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors">
+                Features
+              </a>
+              <a href="/#pricing" className="text-sm font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors">
+                Pricing
+              </a>
+              <a href="/#faq" className="text-sm font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors">
+                FAQ
+              </a>
+            </div>
+
+            {/* Right side */}
+            <div className="flex items-center gap-2 sm:gap-3">
+              <button
+                onClick={toggle}
+                aria-label="Toggle theme"
+                className="p-2 rounded-full text-stone-500 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors cursor-pointer"
+              >
+                {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              </button>
+              <div className="hidden md:flex items-center gap-3">
+                <button
+                  onClick={() => navigate('/signin')}
+                  className="text-sm font-semibold text-stone-700 dark:text-stone-300 hover:text-stone-900 dark:hover:text-stone-100 transition-colors px-3 sm:px-4 py-2 cursor-pointer"
+                >
+                  Log in
+                </button>
+                <button
+                  onClick={() => navigate('/signup')}
+                  className="bg-stone-900 dark:bg-[#ffffff] text-white dark:text-[#000000] text-sm font-semibold px-4 sm:px-5 py-2.5 rounded-full hover:bg-stone-800 dark:hover:bg-[#f0f0f0] transition-all hover:shadow-lg active:scale-[0.98] cursor-pointer"
+                >
+                  Get Started
+                </button>
+              </div>
+              <button
+                className="md:hidden p-2 rounded-full text-stone-500 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors cursor-pointer"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              >
+                {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+            </div>
           </div>
+
+          {/* Mobile Menu */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden py-4 border-t border-stone-200 dark:border-stone-800 flex flex-col gap-4 animate-in slide-in-from-top-2">
+              <button onClick={() => { setIsMobileMenuOpen(false); navigate('/howitworks'); }} className="text-left text-base font-medium text-stone-900 dark:text-stone-100 px-2 py-1">
+                How it Works
+              </button>
+              <button onClick={() => { setIsMobileMenuOpen(false); navigate('/about'); }} className="text-left text-base font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 px-2 py-1">
+                About Us
+              </button>
+              <a href="/#features" onClick={() => setIsMobileMenuOpen(false)} className="text-base font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 px-2 py-1">
+                Features
+              </a>
+              <a href="/#pricing" onClick={() => setIsMobileMenuOpen(false)} className="text-base font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 px-2 py-1">
+                Pricing
+              </a>
+              <a href="/#faq" onClick={() => setIsMobileMenuOpen(false)} className="text-base font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 px-2 py-1">
+                FAQ
+              </a>
+              <div className="flex flex-col gap-3 pt-4 mt-2 border-t border-stone-200 dark:border-stone-800">
+                <button
+                  onClick={() => { setIsMobileMenuOpen(false); navigate('/signin'); }}
+                  className="w-full text-center text-sm font-semibold text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700 rounded-full py-2.5 hover:bg-stone-50 dark:hover:bg-stone-800 transition-colors"
+                >
+                  Log in
+                </button>
+                <button
+                  onClick={() => { setIsMobileMenuOpen(false); navigate('/signup'); }}
+                  className="w-full text-center bg-stone-900 dark:bg-[#ffffff] text-white dark:text-[#000000] text-sm font-semibold rounded-full py-2.5 hover:bg-stone-800 dark:hover:bg-[#f0f0f0] transition-colors"
+                >
+                  Get Started
+                </button>
+              </div>
+            </div>
+          )}
         </nav>
       </header>
 
@@ -198,16 +282,16 @@ export default function HowItWorks() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-full px-4 py-1.5 mb-6">
-            <Shield className="w-4 h-4 text-emerald-600" />
-            <span className="text-sm font-medium text-emerald-700">How KavachPay Works</span>
+          <div className="inline-flex items-center gap-2 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 rounded-full px-4 py-1.5 mb-6">
+            <Shield className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+            <span className="text-sm font-medium text-emerald-700 dark:text-emerald-300">How KavachPay Works</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-stone-900 mb-6 text-balance max-w-4xl mx-auto">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-stone-900 dark:text-stone-100 mb-6 text-balance max-w-4xl mx-auto">
             Smart insurance that pays you when weather disrupts your work
           </h1>
 
-          <p className="text-lg sm:text-xl text-stone-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg sm:text-xl text-stone-600 dark:text-stone-400 max-w-2xl mx-auto leading-relaxed">
             From detection to payout in seconds. No paperwork, no delays, just automatic protection.
           </p>
         </div>
