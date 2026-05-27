@@ -1,4 +1,5 @@
 # 🔐 KavachPay — Work-Proof Parametric Insurance for India's Gig Economy
+KavachPay is a full-stack insurtech platform that protects India's ~15 million gig delivery workers from income loss during weather disruptions, floods, and curfews. Instead of GPS-based verification (easily spoofed), KavachPay uses a proprietary Work-Proof Protocol — a server-side behavioral fingerprinting system that cross-verifies login timestamps, IP geolocation, session activity, and delivery platform signals. Four specialized ML models (Isolation Forest, XGBoost, and a Graph Neural Network for fraud ring detection) evaluate every claim and trigger automatic UPI payouts via Razorpay in under 90 seconds. Built with React 18, Node.js/Express, PostgreSQL, and a Python/FastAPI ML microservice.
 
 ## 🚀 [**🔴 PLAY LIVE DEMO NOW**](https://kavachpay-seven.vercel.app/)
 
